@@ -13,7 +13,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findAllById(long l);
 
     List<Account> findAllByOrganizationInOrderByDateDesc(List<Long> list2);
-
+    List<Account> findFirst4ByOrganizationOrderByDateDesc(Long idOrg);
 
 //    @Query("select acc from account acc where acc.id_org in :ids")
 //    List<Account> findByidOrganization(@Param("ids") Iterable<Long> ids);

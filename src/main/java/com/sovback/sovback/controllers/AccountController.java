@@ -49,6 +49,11 @@ public class AccountController {
         return list2;
     }
 
+    private Long inn_to_idOrg(String inn){
+        Organization o=orgRep.findOneByInn(inn);
+        return o.getId();
+    }
+
     @GetMapping("/account")
     public List<Map<String, String>> getAccount() {
         List<Map<String, String>> accList = new ArrayList();
@@ -67,6 +72,35 @@ public class AccountController {
         return accList;
     }
 
+    @GetMapping("/personalA")
+    public List<Map<String, String>> getFourAccount(final String inn) {
+        List<Map<String, String>> accList = new ArrayList();
+
+        List<Account> acc = accRep.findFirst4ByOrganizationOrderByDateDesc(inn_to_idOrg(inn));
+        for (Account a : acc){
+            accList.add(new HashMap<String, String>(){{
+                put("number", a.getNumber());
+                put("date", a.getDate());
+                put("amount", String.valueOf(a.getAmount()));
+                put("status", a.getStatus());
+                }});}
+        return accList;
+    }
+
+    @GetMapping("/personalN")
+    public List<Map<String, String>> getTwoNotifications(final String inn) {
+        List<Map<String, String>> notList = new ArrayList();
+
+        List<Notification> not = notRep.findFirst2ByOrganizationOrderByDateDesc(inn_to_idOrg(inn));
+        for (Notification n : not){
+            notList.add(new HashMap<String, String>(){{
+                put("date", n.getDate());
+                put("importance", n.getImportance());
+                put("text", n.getText());
+            }});}
+        return notList;
+    }
+
     @GetMapping("/notification")
     public List<Map<String, String>> getNotifications() {
         List<Map<String, String>> notList = new ArrayList();
@@ -83,4 +117,26 @@ public class AccountController {
 
         return notList;
     }
+
+    @GetMapping("/organizations")
+    public List<Map<String, String>> getOrganizations() {
+        List<Map<String, String>> orgList = new ArrayList();
+
+        List<Long> list=new ArrayList<>();
+        List<Access> acs = acsRep.findAllByUser(1);
+        for(Access a:acs){
+            list.add(a.getOrganization());
+        }
+        List<Organization> org = orgRep.findAllById(list);
+
+        for (Organization o : org){
+            orgList.add(new HashMap<String, String>(){{
+                put("name", o.getName());
+                put("inn", o.getInn());
+                put("director", o.getDirector());
+            }});}
+
+        return orgList;
+    }
+
 }

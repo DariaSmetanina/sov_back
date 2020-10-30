@@ -1,13 +1,14 @@
 package com.sovback.sovback.repositories;
 
-import com.sovback.sovback.model.News;
+import com.sovback.sovback.model.Access;
+import com.sovback.sovback.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface NewsRepository extends JpaRepository<News, Long> {
-    News findOneById(Long ID);
-    List<News> findFirst3ByOrderByDateDesc();
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    User findOneById(long i);
 }

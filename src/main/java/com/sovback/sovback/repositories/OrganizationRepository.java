@@ -17,4 +17,5 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
 
 
     Organization findOneById(long id);
+    Organization findOneByInn(String inn);
 }

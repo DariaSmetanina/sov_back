@@ -17,8 +17,8 @@ public class Organization {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "INN_KPP")
-    private String INN_KPP;
+    @Column(name = "inn")
+    private String inn;
 
     public long getId() {
         return id;
@@ -28,8 +28,8 @@ public class Organization {
         return name;
     }
 
-    public String getINN_KPP() {
-        return INN_KPP;
+    public String getInn() {
+        return inn;
     }
 
     public String getDirector() {

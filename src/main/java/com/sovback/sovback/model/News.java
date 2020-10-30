@@ -34,23 +34,27 @@ public class News {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setMainPart(String mainPart) {
-        this.main_part = mainPart;
+    public void setImportance(String importance) {
+        this.importance = importance;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setMain_part(String main_part) {
+        this.main_part = main_part;
     }
 
     public void setText(String text) {
         this.text = text;
     }
 
-    public void setFile(String files) {
+    public void setFiles(String files) {
         this.files = files;
     }
 
@@ -58,7 +62,15 @@ public class News {
         return title;
     }
 
-    public String getMainPart() {
+    public String getImportance() {
+        return importance;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getMain_part() {
         return main_part;
     }
 
@@ -66,7 +78,7 @@ public class News {
         return text;
     }
 
-    public String getFile() {
+    public String getFiles() {
         return files;
     }
 }

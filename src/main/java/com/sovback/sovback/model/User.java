@@ -21,7 +21,27 @@ public class User {
     private String position;
 
     @Column(name = "email")
-    private float email;
+    private String email;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Column(name = "login")
     private String login;

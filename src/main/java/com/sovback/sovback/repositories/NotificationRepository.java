@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
         List<Notification> findAllByOrganizationInOrderByDateDesc(List<Long> list2);
+        List<Notification> findFirst2ByOrganizationOrderByDateDesc(Long idOrg);
 }
