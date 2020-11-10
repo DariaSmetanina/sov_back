@@ -1,5 +1,4 @@
 package com.sovback.sovback.controllers;
-
 import com.sovback.sovback.model.News;
 import com.sovback.sovback.payload.request.AddNewsRequest;
 import com.sovback.sovback.payload.response.MessageResponse;
@@ -7,10 +6,7 @@ import com.sovback.sovback.repositories.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.Date;
 import java.util.*;
-
 
 @RestController
 @RequestMapping("/api/news")
@@ -19,7 +15,7 @@ public class NewsController {
     @Autowired
     NewsRepository newRep;
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public News getNew(final long ID) {
         News news = newRep.findOneById(ID);
         return news;
@@ -43,7 +39,7 @@ public class NewsController {
     }
 
 
-    @PostMapping("/addNews")
+    @PostMapping("/")
     public ResponseEntity<?> addRequest(@RequestBody final AddNewsRequest AddNewsRequest) {
 
         News ns = new News();
@@ -59,5 +55,4 @@ public class NewsController {
 
         return ResponseEntity.ok(new MessageResponse("Новость успешно создана"));
     }
-
 }

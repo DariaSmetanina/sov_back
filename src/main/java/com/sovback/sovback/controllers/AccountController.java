@@ -9,17 +9,24 @@ import com.sovback.sovback.repositories.AccountRepository;
 import com.sovback.sovback.repositories.NotificationRepository;
 import com.sovback.sovback.repositories.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/acc")
+@RequestMapping("/api/accounts")
 public class AccountController {
 
     @Autowired
@@ -34,31 +41,15 @@ public class AccountController {
     @Autowired
     NotificationRepository notRep;
 
+    @Autowired
+    JavaMailSender mailSender;
 
-    private List<Long> user_to_list_organization_id(long user_id){
-        List<Long> list=new ArrayList<>();
-        List<Access> acs = acsRep.findAllByUser(user_id);
-        for(Access a:acs){
-            list.add(a.getOrganization());
-        }
-        List<Organization> org = orgRep.findAllById(list);
-        List<Long> list2=new ArrayList<>();
-        for(Organization o:org){
-            list2.add(o.getId());
-        }
-        return list2;
-    }
-
-    private Long inn_to_idOrg(String inn){
-        Organization o=orgRep.findOneByInn(inn);
-        return o.getId();
-    }
 
     @GetMapping("/account")
     public List<Map<String, String>> getAccount() {
         List<Map<String, String>> accList = new ArrayList();
 
-        List<Account> acc = accRep.findAllByOrganizationInOrderByDateDesc(user_to_list_organization_id(2));
+        List<Account> acc = accRep.findAllByOrganizationInOrderByDateDesc(CommonMethods.get_users_org(acsRep,orgRep,2));
         for (Account a : acc){
             accList.add(new HashMap<String, String>(){{
                 put("id", Long.toString(a.getId()));
@@ -72,50 +63,27 @@ public class AccountController {
         return accList;
     }
 
-    @GetMapping("/personalA")
+    @GetMapping("/personal")
     public List<Map<String, String>> getFourAccount(final String inn) {
         List<Map<String, String>> accList = new ArrayList();
 
-        List<Account> acc = accRep.findFirst4ByOrganizationOrderByDateDesc(inn_to_idOrg(inn));
+        List<Account> acc = accRep.findFirst4ByOrganizationOrderByDateDesc(CommonMethods.inn_to_idOrg(orgRep,inn));
         for (Account a : acc){
             accList.add(new HashMap<String, String>(){{
                 put("number", a.getNumber());
                 put("date", a.getDate());
                 put("amount", String.valueOf(a.getAmount()));
                 put("status", a.getStatus());
+
                 }});}
+
+        List<String> lst=new ArrayList();
+        lst.add("smetanina.03@mail.ru");
+        lst.add("8881143@rambler.ru");
+        lst.add("amrasambarusa@gmail.com");
+        mSender.sendEmailToReference(mailSender,lst);
+
         return accList;
-    }
-
-    @GetMapping("/personalN")
-    public List<Map<String, String>> getTwoNotifications(final String inn) {
-        List<Map<String, String>> notList = new ArrayList();
-
-        List<Notification> not = notRep.findFirst2ByOrganizationOrderByDateDesc(inn_to_idOrg(inn));
-        for (Notification n : not){
-            notList.add(new HashMap<String, String>(){{
-                put("date", n.getDate());
-                put("importance", n.getImportance());
-                put("text", n.getText());
-            }});}
-        return notList;
-    }
-
-    @GetMapping("/notification")
-    public List<Map<String, String>> getNotifications() {
-        List<Map<String, String>> notList = new ArrayList();
-
-        List<Notification> not = notRep.findAllByOrganizationInOrderByDateDesc(user_to_list_organization_id(1));
-        for (Notification n : not){
-            notList.add(new HashMap<String, String>(){{
-                put("id", Long.toString(n.getId()));
-                put("date", n.getDate());
-                put("importance", n.getImportance());
-                put("text", n.getText());
-                put("organization", String.valueOf(orgRep.findOneById(n.getOrganization()).getName()));
-            }});}
-
-        return notList;
     }
 
     @GetMapping("/organizations")
