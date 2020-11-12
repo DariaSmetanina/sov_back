@@ -17,8 +17,38 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "position")
-    private String position;
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "role")
+    private String role;
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 
     @Column(name = "email")
     private String email;
@@ -27,25 +57,20 @@ public class User {
         this.name = name;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    @Column(name = "login")
-    private String login;
-
-    @Column(name = "password")
-    private String password;
 }

@@ -5,6 +5,7 @@ import com.sovback.sovback.payload.response.MessageResponse;
 import com.sovback.sovback.repositories.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
@@ -40,6 +41,7 @@ public class NewsController {
 
 
     @PostMapping("/")
+    @PreAuthorize("hasAuthority('accounter')")
     public ResponseEntity<?> addRequest(@RequestBody final AddNewsRequest AddNewsRequest) {
 
         News ns = new News();

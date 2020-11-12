@@ -4,6 +4,8 @@ import com.sovback.sovback.model.Access;
 import com.sovback.sovback.model.Organization;
 import com.sovback.sovback.repositories.AccessRepository;
 import com.sovback.sovback.repositories.OrganizationRepository;
+import com.sovback.sovback.security.services.UserDetailsImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,11 @@ public class CommonMethods {
     public static Long inn_to_idOrg(OrganizationRepository orgRep, String inn){
         Organization o=orgRep.findOneByInn(inn);
         return o.getId();
+    }
+
+    public static long getCurrentUserId() {
+        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();;
+        return user.getId();
     }
 
 

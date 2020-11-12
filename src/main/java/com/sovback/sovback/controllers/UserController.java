@@ -6,6 +6,7 @@ import com.sovback.sovback.payload.response.MessageResponse;
 import com.sovback.sovback.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -19,9 +20,10 @@ public class UserController {
     UserRepository usgRep;
 
     @PostMapping("/settings")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> userSettings(@RequestBody final userSettingsRequest USRequest) {
         String message="";
-        User userS=usgRep.findOneById(1);
+        User userS=usgRep.findOneById(CommonMethods.getCurrentUserId());
 
         if(Optional.ofNullable(USRequest.getEmail()).isPresent()){
             userS.setEmail(USRequest.getEmail());
