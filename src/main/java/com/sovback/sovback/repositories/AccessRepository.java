@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface AccessRepository extends JpaRepository<Access, Long> {
     List<Access> findAllByUser(long l);
+
+    Access findByOrganizationAndAndUser(long org,long us);
 }

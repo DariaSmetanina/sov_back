@@ -17,6 +17,14 @@ public class Access {
     @Column(name = "user")
     private long user;
 
+    public void setUser(long user) {
+        this.user = user;
+    }
+
+    public void setOrganization(long organization) {
+        this.organization = organization;
+    }
+
     @Column(name = "organization")
     private long organization;
 

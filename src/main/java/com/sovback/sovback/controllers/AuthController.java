@@ -28,6 +28,7 @@ public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
 
+
     @Autowired
     UserRepository userRepository;
 
@@ -61,8 +62,7 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    @PreAuthorize("isAuthenticated()")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity

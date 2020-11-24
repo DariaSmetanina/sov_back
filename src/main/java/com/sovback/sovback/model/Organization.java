@@ -20,6 +20,9 @@ public class Organization {
     @Column(name = "inn")
     private String inn;
 
+    @Column(name = "director")
+    private String director;
+
     public long getId() {
         return id;
     }
@@ -32,10 +35,21 @@ public class Organization {
         return inn;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setInn(String inn) {
+        this.inn = inn;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
     public String getDirector() {
         return director;
     }
 
-    @Column(name = "director")
-    private String director;
+
 }

@@ -16,16 +16,24 @@ public class NewsController {
     @Autowired
     NewsRepository newRep;
 
-    @GetMapping("/")
+    @GetMapping("/one")
     public News getNew(final long ID) {
         News news = newRep.findOneById(ID);
         return news;
     }
 
+    @GetMapping("/")
+    public List<Map<String, String>> getAll() {
+        return newsList_to_map(newRep.findFirst30ByOrderByDateDesc());
+    }
+
     @GetMapping("/three")
     public List<Map<String, String>> getThreeNews() {
+        return newsList_to_map(newRep.findFirst3ByOrderByDateDesc());
+    }
+
+    private List<Map<String, String>> newsList_to_map(List<News> news){
         List<Map<String, String>> newsList = new ArrayList();
-        List<News> news = newRep.findFirst3ByOrderByDateDesc();
         for (News n : news) {
             newsList.add(new HashMap<String, String>() {{
                 put("id", Long.toString(n.getId()));
@@ -35,14 +43,12 @@ public class NewsController {
                 put("mainPart", n.getMain_part());
             }});
         }
-
         return newsList;
     }
 
-
     @PostMapping("/")
-    @PreAuthorize("hasAuthority('accounter')")
-    public ResponseEntity<?> addRequest(@RequestBody final AddNewsRequest AddNewsRequest) {
+    @PreAuthorize("hasAuthority('accountant')")
+    public ResponseEntity<?> addNews(@RequestBody final AddNewsRequest AddNewsRequest) {
 
         News ns = new News();
 

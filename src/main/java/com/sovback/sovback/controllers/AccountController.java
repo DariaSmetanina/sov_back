@@ -41,7 +41,7 @@ public class AccountController {
 
 
     @GetMapping("/account")
-    @PreAuthorize("hasAuthority('accounter')")
+    @PreAuthorize("hasAuthority('accountant')")
     public List<Map<String, String>> getAccount() {
         List<Map<String, String>> accList = new ArrayList();
 
