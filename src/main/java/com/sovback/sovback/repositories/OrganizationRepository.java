@@ -18,4 +18,8 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
 
     Organization findOneById(long id);
     Organization findOneByInn(String inn);
+
+    @Query(value = "select id_organization from organization where organization.inn in :inns", nativeQuery = true)
+    List<Long> getOrgIds(@Param("inns") List<String> inns);
+
 }

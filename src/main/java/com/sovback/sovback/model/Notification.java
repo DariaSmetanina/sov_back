@@ -42,6 +42,22 @@ public class Notification {
         return text;
     }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setImportance(String importance) {
+        this.importance = importance;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setOrganization(long organization) {
+        this.organization = organization;
+    }
+
     public long getOrganization() {
         return organization;
     }

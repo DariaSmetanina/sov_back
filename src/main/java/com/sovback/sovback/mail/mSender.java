@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class mSender {
 
-    public static String sendEmailToReference(JavaMailSender mailSender, List<String> emailS){
+    public static String sendEmailToReference(JavaMailSender mailSender, List<String> emailS, String subject, String mtext){
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", true);
@@ -18,14 +18,13 @@ public class mSender {
         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         props.put("mail.smtp.starttls.enable", "true");
 
-
         for(String em : emailS) {
             try {
                 MimeMessage mail = mailSender.createMimeMessage();
                 MimeMessageHelper messageHelper = new MimeMessageHelper(mail, true);
                 messageHelper.setTo(em);
-                messageHelper.setSubject("Testing mail");
-                messageHelper.setText("HTML Text or Any text You want to send ", true);
+                messageHelper.setSubject(subject);
+                messageHelper.setText(mtext, true);
                 mailSender.send(mail);
 
             } catch (MailException | MessagingException e) {
