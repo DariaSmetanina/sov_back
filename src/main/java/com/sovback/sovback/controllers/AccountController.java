@@ -1,6 +1,6 @@
 package com.sovback.sovback.controllers;
 
-import com.sovback.sovback.mail.mSender;
+import com.sovback.sovback.common.CommonMethods;
 import com.sovback.sovback.model.Access;
 import com.sovback.sovback.model.Account;
 import com.sovback.sovback.model.Organization;

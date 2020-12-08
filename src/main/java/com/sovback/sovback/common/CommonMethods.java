@@ -1,4 +1,4 @@
-package com.sovback.sovback.controllers;
+package com.sovback.sovback.common;
 
 import com.sovback.sovback.model.Access;
 import com.sovback.sovback.model.Organization;

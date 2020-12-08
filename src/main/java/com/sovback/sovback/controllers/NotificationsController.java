@@ -1,32 +1,18 @@
 package com.sovback.sovback.controllers;
 
-import com.sovback.sovback.model.Access;
-import com.sovback.sovback.model.Account;
+import com.sovback.sovback.common.CommonMethods;
 import com.sovback.sovback.model.Notification;
-import com.sovback.sovback.model.Organization;
-import com.sovback.sovback.payload.request.LoginRequest;
-import com.sovback.sovback.payload.response.JwtResponse;
 import com.sovback.sovback.repositories.AccessRepository;
-import com.sovback.sovback.repositories.AccountRepository;
 import com.sovback.sovback.repositories.NotificationRepository;
 import com.sovback.sovback.repositories.OrganizationRepository;
-import com.sovback.sovback.security.jwt.JwtUtils;
-import com.sovback.sovback.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/notifications")

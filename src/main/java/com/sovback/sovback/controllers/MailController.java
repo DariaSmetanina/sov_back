@@ -1,9 +1,7 @@
 package com.sovback.sovback.controllers;
 
-import com.sovback.sovback.mail.mSender;
+import com.sovback.sovback.common.mSender;
 import com.sovback.sovback.model.Notification;
-import com.sovback.sovback.model.Organization;
-import com.sovback.sovback.payload.request.AddNewsRequest;
 import com.sovback.sovback.payload.request.MailRequest;
 import com.sovback.sovback.payload.response.MessageResponse;
 import com.sovback.sovback.repositories.AccessRepository;
@@ -13,13 +11,10 @@ import com.sovback.sovback.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/mail")

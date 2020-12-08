@@ -1,5 +1,6 @@
 package com.sovback.sovback.controllers;
 
+import com.sovback.sovback.common.CommonMethods;
 import com.sovback.sovback.model.*;
 import com.sovback.sovback.payload.request.AddOrg;
 import com.sovback.sovback.payload.request.AddOrgToUser;
@@ -10,10 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.sql.SQLException;
 import java.util.*;
 
 @RestController
@@ -29,6 +29,8 @@ public class UserController {
     @Autowired
     OrganizationRepository orgRep;
 
+    @Autowired
+    PasswordEncoder encoder;
 
     @PostMapping("/settings")
     @PreAuthorize("isAuthenticated()")
@@ -36,15 +38,16 @@ public class UserController {
         String message="";
         User userS=usgRep.findOneById(CommonMethods.getCurrentUserId());
 
-        if(Optional.ofNullable(USRequest.getEmail()).isPresent()){
+        if(USRequest.getEmail()!=""){
             userS.setEmail(USRequest.getEmail());
             message=message+"Email изменен;";
         }
         if(Optional.ofNullable(USRequest.getNewPassword()).isPresent()){
             if(Optional.ofNullable(USRequest.getNewPasswordCopy()).isPresent()) {
                 if(Optional.ofNullable(USRequest.getOldPassword()).isPresent()) {
-                    if(USRequest.getOldPassword()==userS.getPassword()){
-                        userS.setPassword(USRequest.getOldPassword());
+                      if(!encoder.matches(encoder.encode(USRequest.getOldPassword()), userS.getPassword())){
+                        userS.setPassword(encoder.encode(USRequest.getNewPassword()));
+                          message=message+" Пароль изменен;";
                     }
                     else{
                         message=message+" Пароль не изменен, старый пароль не верный";
