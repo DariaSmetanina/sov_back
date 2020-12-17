@@ -6,7 +6,11 @@ import com.sovback.sovback.repositories.AccessRepository;
 import com.sovback.sovback.repositories.OrganizationRepository;
 import com.sovback.sovback.security.services.UserDetailsImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,27 @@ public class CommonMethods {
     public static long getCurrentUserId() {
         UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();;
         return user.getId();
+    }
+
+    public static void saveFile(String path, MultipartFile file){
+
+            try {
+                byte[] bytes = file.getBytes();
+
+                String rootPath = path;
+                File dir = new File(rootPath);
+                if (!dir.exists())
+                    dir.mkdirs();
+
+                File serverFile = new File(dir.getAbsolutePath()
+                        + File.separator + file.getOriginalFilename());
+                BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(serverFile));
+                stream.write(bytes);
+                stream.close();
+
+
+            } catch (Exception e) {}
     }
 
 
