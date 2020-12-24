@@ -36,10 +36,6 @@ public class AccountController {
     @Autowired
     NotificationRepository notRep;
 
-    @Autowired
-    JavaMailSender mailSender;
-
-
     @GetMapping("/account")
     @PreAuthorize("hasAuthority('accountant')")
     public List<Map<String, String>> getAccount() {
@@ -73,12 +69,6 @@ public class AccountController {
                 put("status", a.getStatus());
 
                 }});}
-
-//        List<String> lst=new ArrayList();
-//        lst.add("smetanina.03@mail.ru");
-//        lst.add("8881143@rambler.ru");
-//        lst.add("amrasambarusa@gmail.com");
-//        mSender.sendEmailToReference(mailSender,lst);
 
         return accList;
     }

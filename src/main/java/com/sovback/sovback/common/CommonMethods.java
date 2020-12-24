@@ -36,7 +36,7 @@ public class CommonMethods {
     }
 
     public static long getCurrentUserId() {
-        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();;
+        UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return user.getId();
     }
 

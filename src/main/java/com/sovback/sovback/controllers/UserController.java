@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Null;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 @RestController
 @RequestMapping("/api/user")
+//@CrossOrigin("*")
 public class UserController {
 
     @Autowired
@@ -37,9 +39,15 @@ public class UserController {
     @Autowired
     PasswordEncoder encoder;
 
+    @PostMapping("/test")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> posttest(@RequestBody byte[] us){
+        return ResponseEntity.ok(new MessageResponse("test ok"));
+    }
+
     @PostMapping("/settings")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> userSettings(@RequestBody final userSettingsRequest USRequest) {
+    public ResponseEntity<?> userSettings(@RequestBody final userSettingsRequest USRequest) throws NullPointerException {
         String message="";
         User userS=usgRep.findOneById(CommonMethods.getCurrentUserId());
 
@@ -69,18 +77,9 @@ public class UserController {
         return ResponseEntity.ok(new MessageResponse(message));
     }
 
-    @DeleteMapping("/settings")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> deleteOrgForUser(String inn){
-
-        Access as=acsRep.findByOrganizationAndAndUser(orgRep.findOneByInn(inn).getId(), CommonMethods.getCurrentUserId());
-        acsRep.delete(as);
-        return ResponseEntity.ok(new MessageResponse("Вы больше не имеете доступа к этой организации"));
-    }
 
     @PostMapping("/addOrgToUser")
     @PreAuthorize("hasAuthority('admin')")
-
     public ResponseEntity<?> addOrgToUser(@RequestBody final AddOrgToUser AddOrg) throws UsernameNotFoundException  {
 
         User user = usgRep.findByUsername(AddOrg.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Пользователь с таким именем не найден"));
@@ -106,11 +105,25 @@ public class UserController {
         return ResponseEntity.ok(new MessageResponse("Организация добавлена"));
     }
 
-
     @GetMapping("/organization")
     @PreAuthorize("isAuthenticated()")
     public Organization getOrg(String inn){
         return orgRep.findOneByInn(inn);
+    }
+
+
+
+    @PostMapping("/addFile")
+    public @ResponseBody
+    String addFile(@RequestParam("inn") String inn,
+                      @RequestParam(value = "file") MultipartFile file) {
+
+        if (!file.isEmpty()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            CommonMethods.saveFile("C:\\Users\\Dasha\\Desktop\\sovback\\files\\user_files\\"+calendar.get(Calendar.YEAR)+"\\"+((calendar.get(Calendar.MONTH)/3)+1)+"\\"+inn, file);
+        }
+        return "<b>Файл успешно добавлен</b> <a href=\"/cloud/"+inn+"\">Вернуться назад</a>";
     }
 
     @GetMapping("/files")
@@ -134,19 +147,6 @@ public class UserController {
         return flList;
     }
 
-    @PostMapping("/addFile")
-    public @ResponseBody
-    String createNews(@RequestParam("inn") String inn,
-                      @RequestParam("file") MultipartFile file) {
-
-        if (!file.isEmpty()) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            CommonMethods.saveFile("C:\\Users\\Dasha\\Desktop\\sovback\\files\\user_files\\"+calendar.get(Calendar.YEAR)+"\\"+((calendar.get(Calendar.MONTH)/3)+1)+"\\"+inn, file);
-        }
-        return "<b>Файл успешно добавлен</b> <a href=\"/choose/cloud\">Вернуться назад</a>";
-    }
-
     @GetMapping("/download2")
     public @ResponseBody byte[] getFile(@RequestParam("fileName") String fileName, @RequestParam("inn") String inn, HttpServletResponse response) throws IOException {
 
@@ -161,5 +161,15 @@ public class UserController {
         response.setContentLength((int) file.length());
         return FileUtils.readFileToByteArray(file);
     }
+
+    @DeleteMapping("/settings")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> deleteOrgForUser(String inn) throws UsernameNotFoundException{
+
+        Access as = acsRep.findByOrganizationAndAndUser(orgRep.findOneByInn(inn).getId(), CommonMethods.getCurrentUserId()).orElseThrow(() -> new UsernameNotFoundException("Такой организации нет " + inn));;
+        acsRep.delete(as);
+        return ResponseEntity.ok(new MessageResponse("Вы больше не имеете доступа к этой организации"));
+    }
+
 
 }

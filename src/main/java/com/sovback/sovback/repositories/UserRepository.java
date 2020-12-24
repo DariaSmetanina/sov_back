@@ -21,4 +21,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select email from user where user.id_user in :ids and user.role='client'", nativeQuery = true)
     List<String> getUsrs(@Param("ids") List<Long> ids);
+
 }

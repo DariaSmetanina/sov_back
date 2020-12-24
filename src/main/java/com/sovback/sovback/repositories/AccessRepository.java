@@ -9,11 +9,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AccessRepository extends JpaRepository<Access, Long> {
     List<Access> findAllByUser(long l);
-    Access findByOrganizationAndAndUser(long org,long us);
+    Optional<Access> findByOrganizationAndAndUser(long org, long us);
 
     @Query(value = "select DISTINCT user from access where access.organization in :ids" , nativeQuery = true)
     List<Long> getUsrIds(@Param("ids") List<Long> ids);
