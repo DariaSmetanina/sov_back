@@ -1,8 +1,7 @@
 package com.sovback.sovback.controllers;
-import com.sovback.sovback.common.CommonMethods;
+import com.sovback.sovback.common.StorageService;
 import com.sovback.sovback.model.News;
 import com.sovback.sovback.repositories.NewsRepository;
-import com.sovback.sovback.repositories.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.*;
@@ -77,12 +76,10 @@ public class NewsController {
         newRep.save(ns);
 
         if (!file.isEmpty()) {
-            CommonMethods.saveFile("C:\\Users\\Dasha\\Desktop\\sovback\\files\\news\\" + d, file);
+            StorageService.saveNewsFile(d, file);
         }
         return "<b>Новость успешно добавлена</b> <a href=\"/\">Вернуться назад</a>";
     }
 
 
-    }
-
-//File dbFile = new File("C:\\Users\\Dasha\\Desktop\\sovback\\files\\news\\2020-12-09\\material.jpg");
+}

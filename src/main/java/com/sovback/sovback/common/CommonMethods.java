@@ -40,26 +40,7 @@ public class CommonMethods {
         return user.getId();
     }
 
-    public static void saveFile(String path, MultipartFile file){
 
-            try {
-                byte[] bytes = file.getBytes();
-
-                String rootPath = path;
-                File dir = new File(rootPath);
-                if (!dir.exists())
-                    dir.mkdirs();
-
-                File serverFile = new File(dir.getAbsolutePath()
-                        + File.separator + file.getOriginalFilename());
-                BufferedOutputStream stream = new BufferedOutputStream(
-                        new FileOutputStream(serverFile));
-                stream.write(bytes);
-                stream.close();
-
-
-            } catch (Exception e) {}
-    }
 
 
 }

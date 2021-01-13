@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
-//@EnableWebMvc
+@EnableWebMvc
 //@EnableWebflux
 @Configuration
 public class TestWebSecurityConfig extends WebSecurityConfigurerAdapter {

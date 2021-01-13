@@ -1,6 +1,7 @@
 package com.sovback.sovback.controllers;
 
 import com.sovback.sovback.common.CommonMethods;
+import com.sovback.sovback.common.StorageService;
 import com.sovback.sovback.model.*;
 import com.sovback.sovback.payload.request.AddOrg;
 import com.sovback.sovback.payload.request.AddOrgToUser;
@@ -15,9 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.Null;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -26,6 +25,8 @@ import java.util.*;
 @RequestMapping("/api/user")
 //@CrossOrigin("*")
 public class UserController {
+
+    private final String FILEPATH = "C:\\Users\\Dasha\\Desktop\\sovback\\files\\";
 
     @Autowired
     UserRepository usgRep;
@@ -111,18 +112,12 @@ public class UserController {
         return orgRep.findOneByInn(inn);
     }
 
-
-
     @PostMapping("/addFile")
     public @ResponseBody
     String addFile(@RequestParam("inn") String inn,
                       @RequestParam(value = "file") MultipartFile file) {
 
-        if (!file.isEmpty()) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            CommonMethods.saveFile("C:\\Users\\Dasha\\Desktop\\sovback\\files\\user_files\\"+calendar.get(Calendar.YEAR)+"\\"+((calendar.get(Calendar.MONTH)/3)+1)+"\\"+inn, file);
-        }
+        if (!file.isEmpty()) { StorageService.saveUserFile(inn, file);}
         return "<b>Файл успешно добавлен</b> <a href=\"/cloud/"+inn+"\">Вернуться назад</a>";
     }
 
@@ -130,14 +125,9 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public List<Map<String, String>> getFiles(String inn){
 
-        List<Map<String, String>> flList = new ArrayList();
+        List<Map<String, String>> flList=new ArrayList<>();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-
-        File dir = new File("C:\\Users\\Dasha\\Desktop\\sovback\\files\\user_files\\"+calendar.get(Calendar.YEAR)+"\\"+((calendar.get(Calendar.MONTH)/3)+1)+"\\"+inn);
-        File[] arrFiles = dir.listFiles();
-        List<File> lst = Arrays.asList(arrFiles);
+        List<File> lst = StorageService.getListFiles(inn);
 
         for (File f : lst) {
             flList.add(new HashMap<String, String>() {{
@@ -150,9 +140,7 @@ public class UserController {
     @GetMapping("/download2")
     public @ResponseBody byte[] getFile(@RequestParam("fileName") String fileName, @RequestParam("inn") String inn, HttpServletResponse response) throws IOException {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        File file = new File("C:\\Users\\Dasha\\Desktop\\sovback\\files\\user_files\\"+calendar.get(Calendar.YEAR)+"\\"+((calendar.get(Calendar.MONTH)/3)+1)+"\\"+inn+"\\"+fileName);
+        File file = StorageService.getFile(inn,fileName);
 
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");

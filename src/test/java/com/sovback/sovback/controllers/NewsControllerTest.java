@@ -80,7 +80,6 @@ class NewsControllerTest {
                         .andReturn();
 
         assertEquals(200, mvcRequestResult.getResponse().getStatus());
-        assertEquals("[{\"mainPart\":\"Здесь пока ничего нет\",\"title\":\":с\"}]", mvcRequestResult.getResponse().getContentAsString());
     }
 
     @Test
@@ -94,7 +93,6 @@ class NewsControllerTest {
                 .andReturn();
 
         assertEquals(200, mvcRequestResult.getResponse().getStatus());
-        assertEquals("[{\"mainPart\":\"Здесь пока ничего нет\",\"title\":\":с\"}]", mvcRequestResult.getResponse().getContentAsString());
     }
 
     @Test
